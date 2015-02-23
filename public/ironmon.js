@@ -8,7 +8,12 @@
   It also contains a property passed in as a parameter:
     - name
 */
-var Ironmon = function(name) {
+var Ironmon = function(name, type) {
+  this.health = 25;
+  this.power = 1;
+
+  this.name = name;
+  this.type = type;
 
 }
 
@@ -22,13 +27,20 @@ var Ironmon = function(name) {
 */
 Ironmon.prototype.heal = function() {
 
+  healthAdd = _.sample([1, 2, 3, 4, 5]);
+  this.health = this.health + healthAdd;
+
+  if (this.health > 25) {
+    this.health = 25;
+  }
+
 }
 
 /*
   This function adds one to the power of the Ironmon.
 */
 Ironmon.prototype.train = function() {
-
+  this.power = this.power + 1;
 }
 
 /*
@@ -37,7 +49,10 @@ Ironmon.prototype.train = function() {
   Otherwise, it returns false.
 */
 Ironmon.prototype.active = function() {
-
+  if (this.health > 0) {
+    return true;
+  }
+  return false;
 }
 
 /*
@@ -49,5 +64,20 @@ Ironmon.prototype.active = function() {
   This function returns the amount of damage dealt.
 */
 Ironmon.prototype.attack = function(opponent) {
-  
+
+  var damage = _.random(1, this.power);
+
+  if (this.type === "water" && opponent.type === "fire") {damage = damage*2};
+  if (this.type === "fire" && opponent.type === "grass") {damage = damage*2};
+  if (this.type === "grass" && opponent.type === "water") {damage = damage*2};
+
+  opponent.health = opponent.health - damage;
+
+  return damage;
 }
+
+
+
+
+
+
